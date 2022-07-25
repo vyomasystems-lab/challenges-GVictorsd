@@ -1,4 +1,4 @@
-# Multiplexer Design Verification
+# Sequence Detector Design Verification
 
 The verification environment is setup using [Vyoma's UpTickPro](https://vyomasystems.com) provided for the hackathon.
 
@@ -8,84 +8,39 @@ The verification environment is setup using [Vyoma's UpTickPro](https://vyomasys
 
 ## Verification Environment
 
-The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs to the Design Under Test (adder module here) which takes in 31 input signals each of 2 bits wide *inp0 - inp30*. A select signal produces corresponding input at the output.
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs to the Design Under Test (adder module here) which takes in 4-bit inputs *a* and *b* and gives 5-bit output *sum*
 
 The values are assigned to the input port using 
 ```
-dut.inp0.value = 0
-dut.inp1.value = 1
-dut.inp2.value = 2
-dut.inp3.value = 3
-dut.inp4.value = 0
-dut.inp5.value = 1
-dut.inp6.value = 2
-dut.inp7.value = 3
-dut.inp8.value = 0
-dut.inp9.value = 1
-dut.inp10.value = 2
-dut.inp11.value = 3
-dut.inp12.value = 0
-dut.inp13.value = 1
-dut.inp14.value = 2
-dut.inp15.value = 3
-dut.inp16.value = 0
-dut.inp17.value = 1
-dut.inp18.value = 2
-dut.inp19.value = 3
-dut.inp20.value = 0
-dut.inp21.value = 1
-dut.inp22.value = 2
-dut.inp23.value = 3
-dut.inp24.value = 0
-dut.inp25.value = 1
-dut.inp26.value = 2
-dut.inp27.value = 3
-dut.inp28.value = 0
-dut.inp29.value = 1
-dut.inp30.value = 2
+    inputseq = [1,0,1,1,0,1,1]
+    for i in inputseq:
+        dut.inp_bit.value = i
 ```
 
-While the Select input(DUT.sel.value) was driven by a loop passing over values from 0 to 30
+The Clock signal is ticked using the following statement
 ```
-for i in range(31):
-    dut.sel.value = i
-    (...)
+    await FallingEdge(dut.clk)
 ```
 
-The assert statement is used for comparing the Multiplexers's outut to the expected value.
+The assert statement is used for comparing the Module's output to the expected value.
 
 
 ## Test Scenario - 1
 
 The following error is seen:
 ```
-assert dut.out.value == inputs[i], f"Test failed with: Sel={i}, Expected Output(input[{i}])={inputs[i]}, DUTOutput={int(dut.out.value)}"
-AssertionError: Test failed with: Sel=13, Expected Output(input[13])=1, DUTOutput=0
+assert dut.seq_seen.value == checkseq(inputseq, curindex), f"Test failed with: Index={curindex}, Expected Output={checkseq(inputseq, curindex)}, DUTOutput={int(dut.seq_seen.value)}"
+
+AssertionError: Test failed with: Index=6, Expected Output=True, DUTOutput=0
 ```
 
 - Test Inputs:
-    inp13=1, 
-    sel=13
-- Expected Output: 1
-- Observed Output in the DUT dut.out = 0
+    input Sequence = [1,0,1,1,0,1,1]
+- Expected Output sequence = [0,0,0,1,0,0,1]
+- Observed Output in the DUT dut.seq_seen = [0,0,0,1,0,0,0]
 
 Output mismatches for the above inputs proving that there is a design bug
 
-
-## Test Scenario - 2
-The following error is seen:
-```
-assert dut.out.value == inputs[i], f"Test failed with: Sel={i}, Expected Output(input[{i}])={inputs[i]}, DUTOutput={int(dut.out.value)}"
-AssertionError: Test failed with: Sel=30, Expected Output(input[30])=2, DUTOutput=0
-```
-
-- Test Inputs:
-    inp30=2, 
-    sel=30
-- Expected Output: 2
-- Observed Output in the DUT dut.out = 0
-
-Output mismatches for the above inputs proving that there is a design bug
 
 ## Design Bug
 ### Design Bug (1)
