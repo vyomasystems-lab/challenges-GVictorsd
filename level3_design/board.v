@@ -7,19 +7,22 @@
 	`include "outputRegister.v"
 	`include "controlunit.v"
 
-module board;
+module board(clk);
+	input clk;
+
 	wire[7:0] Bus;
-	reg clk,clr;
+	reg clr;
 	wire hlt,marwa,ramwa,ramoa,inregoa,inregwa,awa,aoa,sumout,sub,bwa,outregwa,pcinc,pcoe,pcjmp,flagsin;
 	assign Bus=8'h00;
 	
-	initial 
-	begin
-		clk<=0;
-	end
+	// initial 
+	// begin
+	// 	$display("___initial");
+	// 	clk<=0;
+	// end
 	
-	always #2 if(~hlt)
-		clk = ~clk;
+	// always #2 if(~hlt)
+	// 	clk = ~clk;
 	
 	counter pc(Bus[3:0],Bus[3:0],clk,clr,pcoe,pcjmp,pcinc);
 

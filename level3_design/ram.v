@@ -16,10 +16,10 @@
 	
 	tri[7:0] bus;
 		wire[7:0] data_out,data_in;
-		assign bus=oa?data_out:8'hzz;
-		assign data_in=wa?bus:8'hzz;
+		assign bus=oa?data_out:8'h00;
+		assign data_in=wa?bus:8'h00;
 
-	assign data_out=(cs & oa)? mem[addr]: 8'hzz;
+	assign data_out=(cs & oa)? mem[addr]: 8'h00;
 	
 	always@ (posedge clk)
 		if(cs & wa & (~oa))

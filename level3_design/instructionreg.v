@@ -12,7 +12,7 @@
 	output[3:0] addrout);
 	reg[7:0] store;
 
-	assign addrout = (oa)? store[3:0]: 4'hz;
+	assign addrout = (oa)? store[3:0]: 4'h0;
 
 	always@ (posedge clk)
 	begin

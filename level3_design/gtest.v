@@ -15,7 +15,7 @@
 	wire[7:0] Bus;
 	reg clk,clr;
 
-	assign Bus=8'hzz;
+	assign Bus=8'h00;
 	
 	initial clk=0;
 	always #2 clk=~clk;
@@ -62,7 +62,7 @@
 	reg[7:0] Buss;
 	reg[3:0] addr;
 	reg control;
-	assign Bus = control? Buss: 8'hzz;
+	assign Bus = control? Buss: 8'h00;
 
 	initial
 	begin

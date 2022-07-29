@@ -21,6 +21,6 @@
 		
 	end
 
-	assign data_out= oa? store: 8'hzz;
+	assign data_out= oa? store: 8'h00;
 
 	endmodule

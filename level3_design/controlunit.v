@@ -91,7 +91,7 @@
 			//************** HLT ***************//
 			9'b1111zzzzz : $finish;
 
-			default: controlword<= 16'hxxxx;
+			default: controlword<= 16'h0000;
 		endcase
 	end
 	endmodule

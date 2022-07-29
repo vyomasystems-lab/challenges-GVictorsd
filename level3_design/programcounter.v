@@ -15,7 +15,7 @@
 		input clk,clr,oe,jmp,inc);
 	reg[3:0] store; 
 
-	assign out= oe? store: 4'hz;
+	assign out= oe? store: 4'h0;
 
 	always @(posedge clk)
 	begin

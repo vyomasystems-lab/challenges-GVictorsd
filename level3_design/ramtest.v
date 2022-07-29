@@ -11,7 +11,7 @@
 	initial clk=0;
 	always #2 clk=~clk;
 	
-	assign bus=(cs & wa)?busin:8'hzz;
+	assign bus=(cs & wa)?busin:8'h00;
 	integer i;
 	initial
 	begin
